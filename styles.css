@@ -1,0 +1,244 @@
+/* Estilos generales */
+body {
+    background-color: #f9f9f9; /* Fondo gris claro */
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    color: #333;
+    margin-top: 20px;
+    font-size: 2em; /* Tamaño de fuente relativo */
+}
+
+.menu {
+    margin: 20px;
+    display: flex;
+    flex-wrap: wrap; /* Permite que los botones se ajusten en varias filas */
+    justify-content: center; /* Centra los elementos horizontalmente */
+}
+
+button {
+    padding: 1em 1.5em; /* Unidades relativas */
+    margin: 10px;
+    font-size: 1em; /* Tamaño de fuente relativo */
+    cursor: pointer;
+    border: 1px solid #666; /* Línea delgada en el borde */
+    border-radius: 15px; /* Bordes redondeados */
+    color: #333; /* Texto en color más oscuro */
+    background-color: #fff; /* Fondo blanco */
+}
+
+button:hover {
+    opacity: 0.9; /* Efecto hover */
+}
+
+button:focus {
+    outline: none; /* Eliminamos el borde de enfoque predeterminado */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Añadimos sombra al hacer foco */
+}
+
+/* Colores pastel para los bordes de los botones principales */
+#btnSonidos {
+    border-color: #FFB3BA; /* Rosa pastel */
+}
+
+#btnAnimaciones {
+    border-color: #FFDFBA; /* Naranja pastel */
+}
+
+#btnEjercicios {
+    border-color: #FFFFBA; /* Amarillo pastel */
+}
+
+/* Estilos para los botones dentro de las opciones */
+.opciones {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px auto;
+    max-width: 90%; /* Limitamos el ancho máximo */
+}
+
+.opciones button {
+    margin: 10px;
+    padding: 0.8em 1.2em;
+    font-size: 1em;
+    border: 1px solid #666;
+    border-radius: 10px;
+    color: #333;
+    background-color: #fff;
+    width: 100%; /* Botones ocupan todo el ancho disponible */
+    max-width: 300px; /* Ancho máximo para evitar botones demasiado largos */
+}
+
+.opciones button:hover {
+    opacity: 0.9;
+}
+
+.opciones button:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Colores pastel para los bordes de los botones de opciones */
+.opciones button:nth-child(1) {
+    border-color: #BAE1FF; /* Azul pastel */
+}
+
+.opciones button:nth-child(2) {
+    border-color: #BFFCC6; /* Verde pastel */
+}
+
+.opciones button:nth-child(3) {
+    border-color: #B28DFF; /* Morado pastel */
+}
+
+/* Estilos para el contenedor de contenido */
+#contenido {
+    margin: 30px auto;
+    max-width: 90%;
+}
+
+/* Estilos para las animaciones y ejercicios */
+.animation1, .animation2, .animation3 {
+    width: 200px;
+    height: 200px;
+    margin: 20px auto;
+}
+
+@media (max-width: 600px) {
+    .animation1, .animation2, .animation3 {
+        width: 150px;
+        height: 150px;
+    }
+}
+
+.animation1 {
+    background: radial-gradient(circle, #FFB3BA, #FFDFBA);
+    border-radius: 50%;
+    animation: pulse 3s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.9);
+        background: radial-gradient(circle, #FFB3BA, #FFDFBA);
+    }
+    50% {
+        transform: scale(1.1);
+        background: radial-gradient(circle, #BAE1FF, #B28DFF);
+    }
+    100% {
+        transform: scale(0.9);
+        background: radial-gradient(circle, #FFB3BA, #FFDFBA);
+    }
+}
+
+.animation2 {
+    background: conic-gradient(#FFB3BA, #BFFCC6, #BAE1FF, #FFB3BA);
+    border-radius: 50%;
+    animation: rotate 5s infinite linear;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.animation3 {
+    background: linear-gradient(45deg, #FFDFBA, #B28DFF);
+    border-radius: 50%;
+    animation: fade 4s infinite;
+}
+
+@keyframes fade {
+    0% {
+        opacity: 1;
+        background: linear-gradient(45deg, #FFDFBA, #B28DFF);
+    }
+    50% {
+        opacity: 0.3;
+        background: linear-gradient(45deg, #BFFCC6, #FFB3BA);
+    }
+    100% {
+        opacity: 1;
+        background: linear-gradient(45deg, #FFDFBA, #B28DFF);
+    }
+}
+
+/* Estilos para los ejercicios de relajación */
+.ejercicio {
+    font-size: 1em; /* Tamaño de fuente relativo */
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 20px auto;
+    text-align: left;
+    padding: 0 20px; /* Añadimos padding lateral */
+}
+
+.ejercicio p {
+    margin-bottom: 15px;
+}
+
+.ejercicio button {
+    padding: 0.8em 1.2em;
+    font-size: 1em;
+    margin-top: 20px;
+    cursor: pointer;
+    border: 1px solid #666;
+    border-radius: 10px;
+    color: #333;
+    background-color: #fff;
+}
+
+.ejercicio button:hover {
+    opacity: 0.9;
+}
+
+.ejercicio button:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Media Queries para tamaños de pantalla más pequeños */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.5em;
+    }
+
+    button {
+        padding: 0.8em 1.2em;
+        font-size: 0.9em;
+    }
+
+    .ejercicio {
+        font-size: 0.9em;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.2em;
+    }
+
+    button {
+        padding: 0.6em 1em;
+        font-size: 0.8em;
+    }
+
+    .ejercicio {
+        font-size: 0.8em;
+    }
+
+    .animation1, .animation2, .animation3 {
+        width: 120px;
+        height: 120px;
+    }
+}
