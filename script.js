@@ -39,13 +39,18 @@ function reproducirSonido(archivo) {
             </div>
         </div>
     `;
-    
+
     const audio = document.getElementById('audioPlayer');
-    
-    // Aseguramos que el audio se cargue antes de reproducir
+
+    // Cargar el audio al hacer clic
     audio.load();
-    
-    // Manejo de errores si el audio no se carga o reproduce correctamente
+
+    // Asegurarse de que la reproducción está permitida al hacer clic
+    audio.addEventListener('canplay', function() {
+        console.log('El audio está listo para reproducirse.');
+    });
+
+    // Control de errores para evitar fallas en la carga
     audio.onerror = function() {
         console.error('Error al cargar o reproducir el archivo de audio');
         alert('Hubo un problema al cargar el archivo de sonido.');
@@ -54,7 +59,10 @@ function reproducirSonido(archivo) {
 
 function playAudio() {
     const audio = document.getElementById('audioPlayer');
-    audio.play().catch(error => {
+    // Reproducir el audio y manejar errores
+    audio.play().then(() => {
+        console.log('Reproducción iniciada con éxito');
+    }).catch(error => {
         console.error('Error al reproducir el sonido: ', error);
         alert('El sonido no se puede reproducir. Por favor, inténtalo de nuevo.');
     });
@@ -64,6 +72,9 @@ function pauseAudio() {
     const audio = document.getElementById('audioPlayer');
     audio.pause();
 }
+
+/* Funciones para mostrar las animaciones y ejercicios de relajación (sin cambios) */
+
 function mostrarOpcionesAnimaciones() {
     document.getElementById('contenido').innerHTML = `
         <div class="ejercicio">
