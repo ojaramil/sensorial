@@ -17,9 +17,9 @@ function mostrarOpcionesSonidos() {
         <div class="ejercicio">
             <h2>Sonidos Calmantes</h2>
             <div class="opciones">
-                <button onclick="reproducirSonido('https://ojaramil.github.io/sonidos/sonido-de-calma-1.mp3"')">Sonido de Calma 1</button>
-                <button onclick="reproducirSonido('https://ojaramil.github.io/sonidos/sonido-de-calma-2.mp3')">Sonido de Calma 2</button>
-                <button onclick="reproducirSonido('https://ojaramil.github.io/sonidos/sonido-de-calma-3.mp3')">Sonido de Calma 3</button>
+                <button onclick="reproducirSonido('sonido1.mp3')">Sonido 1</button>
+                <button onclick="reproducirSonido('sonido2.mp3')">Sonido 2</button>
+                <button onclick="reproducirSonido('sonido3.mp3')">Sonido 3</button>
             </div>
             <div id="player"></div>
         </div>
@@ -31,7 +31,7 @@ function reproducirSonido(archivo) {
         <div class="ejercicio">
             <h2>Reproduciendo Sonido</h2>
             <div class="audio-player">
-                <audio id="audioPlayer" src="${archivo}"></audio>
+                <audio id="audioPlayer" src="${archivo}" preload="auto"></audio>
                 <div class="audio-controls">
                     <button onclick="playAudio()">Reproducir</button>
                     <button onclick="pauseAudio()">Pausar</button>
@@ -39,16 +39,31 @@ function reproducirSonido(archivo) {
             </div>
         </div>
     `;
+    
+    const audio = document.getElementById('audioPlayer');
+    
+    // Aseguramos que el audio se cargue antes de reproducir
+    audio.load();
+    
+    // Manejo de errores si el audio no se carga o reproduce correctamente
+    audio.onerror = function() {
+        console.error('Error al cargar o reproducir el archivo de audio');
+        alert('Hubo un problema al cargar el archivo de sonido.');
+    }
 }
 
 function playAudio() {
-    document.getElementById('audioPlayer').play();
+    const audio = document.getElementById('audioPlayer');
+    audio.play().catch(error => {
+        console.error('Error al reproducir el sonido: ', error);
+        alert('El sonido no se puede reproducir. Por favor, inténtalo de nuevo.');
+    });
 }
 
 function pauseAudio() {
-    document.getElementById('audioPlayer').pause();
+    const audio = document.getElementById('audioPlayer');
+    audio.pause();
 }
-
 function mostrarOpcionesAnimaciones() {
     document.getElementById('contenido').innerHTML = `
         <div class="ejercicio">
