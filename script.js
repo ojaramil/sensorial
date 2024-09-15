@@ -17,9 +17,9 @@ function mostrarOpcionesSonidos() {
         <div class="ejercicio">
             <h2>Sonidos Calmantes</h2>
             <div class="opciones">
-                <button onclick="reproducirSonido('https://ojaramil.github.io/sonidos/sonido-de-calma-1.mp3')">Sonido 1</button>
-                <button onclick="reproducirSonido('https://ojaramil.github.io/sonidos/sonido-de-calma-2.mp3')">Sonido 2</button>
-                <button onclick="reproducirSonido('https://ojaramil.github.io/sonidos/sonido-de-calma-3.mp3')">Sonido 3</button>
+                <button onclick="reproducirSonido('sonido1.mp3')">Sonido 1</button>
+                <button onclick="reproducirSonido('sonido2.mp3')">Sonido 2</button>
+                <button onclick="reproducirSonido('sonido3.mp3')">Sonido 3</button>
             </div>
             <div id="player"></div>
         </div>
@@ -27,12 +27,26 @@ function mostrarOpcionesSonidos() {
 }
 
 function reproducirSonido(archivo) {
-    document.getElementById('player').innerHTML = `
-        <audio controls autoplay>
-            <source src="${archivo}" type="audio/mpeg">
-            Tu navegador no soporta el elemento de audio.
-        </audio>
+    document.getElementById('contenido').innerHTML = `
+        <div class="ejercicio">
+            <h2>Reproduciendo Sonido</h2>
+            <div class="audio-player">
+                <audio id="audioPlayer" src="${archivo}"></audio>
+                <div class="audio-controls">
+                    <button onclick="playAudio()">Reproducir</button>
+                    <button onclick="pauseAudio()">Pausar</button>
+                </div>
+            </div>
+        </div>
     `;
+}
+
+function playAudio() {
+    document.getElementById('audioPlayer').play();
+}
+
+function pauseAudio() {
+    document.getElementById('audioPlayer').pause();
 }
 
 function mostrarOpcionesAnimaciones() {
@@ -179,4 +193,3 @@ function iniciarVisualizacionGuiada() {
     }
     siguienteEscena();
 }
-
