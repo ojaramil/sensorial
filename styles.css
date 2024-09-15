@@ -102,6 +102,38 @@ button:focus {
     max-width: 90%;
 }
 
+/* Estilos para el reproductor de audio personalizado */
+.audio-player {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.audio-controls {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.audio-controls button {
+    padding: 0.8em 1.2em;
+    margin: 0 5px;
+    font-size: 1em;
+    cursor: pointer;
+    border: 1px solid #666;
+    border-radius: 10px;
+    color: #333;
+    background-color: #fff;
+}
+
+.audio-controls button:hover {
+    opacity: 0.9;
+}
+
+.audio-controls button:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
 /* Estilos para las animaciones y ejercicios */
 .animation1, .animation2, .animation3 {
     width: 200px;
@@ -242,3 +274,4 @@ button:focus {
         height: 120px;
     }
 }
+
