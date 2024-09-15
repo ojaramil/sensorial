@@ -17,9 +17,9 @@ function mostrarOpcionesSonidos() {
         <div class="ejercicio">
             <h2>Sonidos Calmantes</h2>
             <div class="opciones">
-                <button onclick="reproducirSonido('https://ojaramil.github.io/sonidos/sonido-de-calma-1.mp3')">Sonido 1</button>
-                <button onclick="reproducirSonido('https://ojaramil.github.io/sonidos/sonido-de-calma-2.mp3')">Sonido 2</button>
-                <button onclick="reproducirSonido('https://ojaramil.github.io/sonidos/sonido-de-calma-3.mp3')">Sonido 3</button>
+                <button onclick="reproducirSonido('https://ojaramil.github.io/sonidos/sonido-de-calma-1.mp3"')">Sonido de Calma 1</button>
+                <button onclick="reproducirSonido('https://ojaramil.github.io/sonidos/sonido-de-calma-2.mp3')">Sonido de Calma 2</button>
+                <button onclick="reproducirSonido('https://ojaramil.github.io/sonidos/sonido-de-calma-3.mp3')">Sonido de Calma 3</button>
             </div>
             <div id="player"></div>
         </div>
