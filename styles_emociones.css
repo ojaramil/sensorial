@@ -19,6 +19,23 @@ h1, h2 {
     color: #333;
 }
 
+.intro-message {
+    background-color: #e0f7fa;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.intro-message h2 {
+    color: #00796b;
+    margin-top: 0;
+}
+
+.intro-message p {
+    color: #555;
+    line-height: 1.5;
+}
+
 form {
     display: flex;
     flex-direction: column;
@@ -91,7 +108,6 @@ button:hover {
     opacity: 0.7;
 }
 
-/* Estilos para el formulario de edición */
 .edit-form {
     display: flex;
     flex-direction: column;
@@ -134,3 +150,4 @@ button:hover {
         font-size: 14px;
     }
 }
+
