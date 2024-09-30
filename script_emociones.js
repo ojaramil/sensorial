@@ -1,181 +1,152 @@
-// script.js
+/* Estilos básicos y diseño responsivo */
 
-document.addEventListener('DOMContentLoaded', () => {
-    const moodForm = document.getElementById('mood-form');
-    const moodHistory = document.getElementById('mood-history');
-    let moods = [];
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
 
-    // Cargar el historial al iniciar
-    loadMoods();
+.container {
+    max-width: 500px;
+    margin: auto;
+    padding: 20px;
+    background-color: #ffffff;
+}
 
-    // Event Listener para el formulario
-    moodForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const moodSelect = document.getElementById('mood');
-        const notesInput = document.getElementById('notes');
+h1, h2 {
+    text-align: center;
+    color: #333;
+}
 
-        if (moodSelect.value === '') {
-            alert('Por favor, selecciona un estado de ánimo.');
-            return;
-        }
+.intro-message {
+    background-color: #e0f7fa;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
 
-        const newMood = {
-            id: Date.now(), // ID único basado en el timestamp
-            mood: moodSelect.value,
-            notes: notesInput.value,
-            date: new Date().toLocaleString()
-        };
+.intro-message h2 {
+    color: #00796b;
+    margin-top: 0;
+}
 
-        moods.push(newMood);
-        saveMoods();
-        addMoodToHistory(newMood);
-        moodForm.reset();
-    });
+.intro-message p {
+    color: #555;
+    line-height: 1.5;
+}
 
-    // Función para cargar los estados de ánimo del localStorage
-    function loadMoods() {
-        const storedMoods = localStorage.getItem('moods');
-        if (storedMoods) {
-            moods = JSON.parse(storedMoods);
-            moods.forEach((mood) => {
-                addMoodToHistory(mood);
-            });
-        }
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-top: 10px;
+    color: #555;
+}
+
+select, textarea, input {
+    padding: 10px;
+    margin-top: 5px;
+    font-size: 16px;
+}
+
+button {
+    padding: 10px;
+    margin-top: 15px;
+    background-color: #28a745;
+    color: #ffffff;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+#mood-history {
+    list-style-type: none;
+    padding: 0;
+}
+
+#mood-history li {
+    background-color: #e9ecef;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    position: relative;
+}
+
+#mood-history li p {
+    margin: 5px 0;
+}
+
+.action-buttons {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.action-buttons button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.action-buttons button.edit {
+    color: #007bff;
+}
+
+.action-buttons button.delete {
+    color: #dc3545;
+}
+
+.action-buttons button:hover {
+    opacity: 0.7;
+}
+
+.edit-form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+.edit-form label {
+    margin-top: 10px;
+    color: #555;
+}
+
+.edit-form select,
+.edit-form textarea {
+    padding: 8px;
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+.edit-form button {
+    padding: 8px;
+    margin-top: 10px;
+    background-color: #ffc107;
+    color: #ffffff;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.edit-form button:hover {
+    background-color: #e0a800;
+}
+
+/* Media Queries para dispositivos móviles */
+@media (max-width: 600px) {
+    .container {
+        padding: 15px;
     }
 
-    // Función para guardar los estados de ánimo en localStorage
-    function saveMoods() {
-        localStorage.setItem('moods', JSON.stringify(moods));
+    button {
+        font-size: 14px;
     }
-
-    // Función para agregar un estado de ánimo al historial visualmente
-    function addMoodToHistory(mood) {
-        const li = document.createElement('li');
-        li.dataset.id = mood.id; // Asignamos el ID al elemento li
-
-        li.innerHTML = `
-            <p><strong>Fecha:</strong> ${mood.date}</p>
-            <p><strong>Estado de Ánimo:</strong> ${mood.mood}</p>
-            ${mood.notes ? `<p><strong>Notas:</strong> ${mood.notes}</p>` : ''}
-            <div class="action-buttons">
-                <button class="edit">✏️</button>
-                <button class="delete">🗑️</button>
-            </div>
-        `;
-
-        moodHistory.prepend(li);
-
-        // Añadimos event listeners a los botones editar y eliminar
-        const editButton = li.querySelector('.edit');
-        const deleteButton = li.querySelector('.delete');
-
-        editButton.addEventListener('click', () => {
-            editMood(mood.id);
-        });
-
-        deleteButton.addEventListener('click', () => {
-            deleteMood(mood.id);
-        });
-    }
-
-    // Función para eliminar un estado de ánimo
-    function deleteMood(id) {
-        if (confirm('¿Estás seguro de que deseas eliminar esta entrada?')) {
-            moods = moods.filter(mood => mood.id !== id);
-            saveMoods();
-            // Remover el elemento visualmente
-            const liToRemove = moodHistory.querySelector(`li[data-id="${id}"]`);
-            if (liToRemove) {
-                moodHistory.removeChild(liToRemove);
-            }
-        }
-    }
-
-    // Función para editar un estado de ánimo
-    function editMood(id) {
-        const moodToEdit = moods.find(mood => mood.id === id);
-        if (moodToEdit) {
-            // Crear un formulario de edición
-            const li = moodHistory.querySelector(`li[data-id="${id}"]`);
-            const editForm = document.createElement('div');
-            editForm.classList.add('edit-form');
-
-// Dentro de la función editMood(id)
-editForm.innerHTML = `
-    <label for="edit-mood">Estado de Ánimo:</label>
-    <select id="edit-mood" required>
-        <option value="">--Seleccionar--</option>
-        <option value="Feliz" ${moodToEdit.mood === 'Feliz' ? 'selected' : ''}>😊 Feliz</option>
-        <option value="Triste" ${moodToEdit.mood === 'Triste' ? 'selected' : ''}>😢 Triste</option>
-        <option value="Ansioso" ${moodToEdit.mood === 'Ansioso' ? 'selected' : ''}>😰 Ansioso</option>
-        <option value="Enojado" ${moodToEdit.mood === 'Enojado' ? 'selected' : ''}>😠 Enojado</option>
-        <option value="Emocionado" ${moodToEdit.mood === 'Emocionado' ? 'selected' : ''}>😃 Emocionado</option>
-        <option value="Calmado" ${moodToEdit.mood === 'Calmado' ? 'selected' : ''}>😌 Calmado</option>
-        <option value="Frustrado" ${moodToEdit.mood === 'Frustrado' ? 'selected' : ''}>😖 Frustrado</option>
-        <option value="Preocupado" ${moodToEdit.mood === 'Preocupado' ? 'selected' : ''}>😟 Preocupado</option>
-        <option value="Confundido" ${moodToEdit.mood === 'Confundido' ? 'selected' : ''}>😕 Confundido</option>
-        <option value="Esperanzado" ${moodToEdit.mood === 'Esperanzado' ? 'selected' : ''}>🤞 Esperanzado</option>
-        <option value="Aburrido" ${moodToEdit.mood === 'Aburrido' ? 'selected' : ''}>😐 Aburrido</option>
-        <option value="Cansado" ${moodToEdit.mood === 'Cansado' ? 'selected' : ''}>😴 Cansado</option>
-        <option value="Sorprendido" ${moodToEdit.mood === 'Sorprendido' ? 'selected' : ''}>😲 Sorprendido</option>
-        <option value="Deprimido" ${moodToEdit.mood === 'Deprimido' ? 'selected' : ''}>😞 Deprimido</option>
-        <option value="Agradecido" ${moodToEdit.mood === 'Agradecido' ? 'selected' : ''}>🙏 Agradecido</option>
-        <option value="Avergonzado" ${moodToEdit.mood === 'Avergonzado' ? 'selected' : ''}>😳 Avergonzado</option>
-        <option value="Motivado" ${moodToEdit.mood === 'Motivado' ? 'selected' : ''}>💪 Motivado</option>
-        <option value="Estresado" ${moodToEdit.mood === 'Estresado' ? 'selected' : ''}>😣 Estresado</option>
-        <option value="Satisfecho" ${moodToEdit.mood === 'Satisfecho' ? 'selected' : ''}>😊 Satisfecho</option>
-        <option value="Nervioso" ${moodToEdit.mood === 'Nervioso' ? 'selected' : ''}>😬 Nervioso</option>
-    </select>
-
-    <label for="edit-notes">Notas:</label>
-    <textarea id="edit-notes" rows="3">${moodToEdit.notes}</textarea>
-
-    <button type="button" class="save-edit">Guardar Cambios</button>
-`;
-
-            // Remplazamos el contenido del li con el formulario de edición
-            li.innerHTML = '';
-            li.appendChild(editForm);
-
-            // Event Listener para guardar los cambios
-            const saveButton = editForm.querySelector('.save-edit');
-            saveButton.addEventListener('click', () => {
-                const editedMood = editForm.querySelector('#edit-mood').value;
-                const editedNotes = editForm.querySelector('#edit-notes').value;
-
-                if (editedMood === '') {
-                    alert('Por favor, selecciona un estado de ánimo.');
-                    return;
-                }
-
-                // Actualizamos el objeto en el array moods
-                moodToEdit.mood = editedMood;
-                moodToEdit.notes = editedNotes;
-                saveMoods();
-
-                // Volvemos a renderizar la entrada editada
-                li.innerHTML = `
-                    <p><strong>Fecha:</strong> ${moodToEdit.date}</p>
-                    <p><strong>Estado de Ánimo:</strong> ${moodToEdit.mood}</p>
-                    ${moodToEdit.notes ? `<p><strong>Notas:</strong> ${moodToEdit.notes}</p>` : ''}
-                    <div class="action-buttons">
-                        <button class="edit">✏️</button>
-                        <button class="delete">🗑️</button>
-                    </div>
-                `;
-
-                // Reasignamos los event listeners
-                const editButton = li.querySelector('.edit');
-                const deleteButton = li.querySelector('.delete');
-
-                editButton.addEventListener('click', () => {
-                    editMood(id);
-                });
-
-                deleteButton.addEventListener('click', () => {
-                    deleteMood(id);
-                });
-            });
-        }
-    }
-});
+}
