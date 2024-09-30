@@ -100,22 +100,38 @@ document.addEventListener('DOMContentLoaded', () => {
             const editForm = document.createElement('div');
             editForm.classList.add('edit-form');
 
-            editForm.innerHTML = `
-                <label for="edit-mood">Estado de Ánimo:</label>
-                <select id="edit-mood" required>
-                    <option value="">--Seleccionar--</option>
-                    <option value="Feliz" ${moodToEdit.mood === 'Feliz' ? 'selected' : ''}>😊 Feliz</option>
-                    <option value="Triste" ${moodToEdit.mood === 'Triste' ? 'selected' : ''}>😢 Triste</option>
-                    <option value="Ansioso" ${moodToEdit.mood === 'Ansioso' ? 'selected' : ''}>😰 Ansioso</option>
-                    <option value="Enojado" ${moodToEdit.mood === 'Enojado' ? 'selected' : ''}>😠 Enojado</option>
-                    <option value="Emocionado" ${moodToEdit.mood === 'Emocionado' ? 'selected' : ''}>😃 Emocionado</option>
-                </select>
+// Dentro de la función editMood(id)
+editForm.innerHTML = `
+    <label for="edit-mood">Estado de Ánimo:</label>
+    <select id="edit-mood" required>
+        <option value="">--Seleccionar--</option>
+        <option value="Feliz" ${moodToEdit.mood === 'Feliz' ? 'selected' : ''}>😊 Feliz</option>
+        <option value="Triste" ${moodToEdit.mood === 'Triste' ? 'selected' : ''}>😢 Triste</option>
+        <option value="Ansioso" ${moodToEdit.mood === 'Ansioso' ? 'selected' : ''}>😰 Ansioso</option>
+        <option value="Enojado" ${moodToEdit.mood === 'Enojado' ? 'selected' : ''}>😠 Enojado</option>
+        <option value="Emocionado" ${moodToEdit.mood === 'Emocionado' ? 'selected' : ''}>😃 Emocionado</option>
+        <option value="Calmado" ${moodToEdit.mood === 'Calmado' ? 'selected' : ''}>😌 Calmado</option>
+        <option value="Frustrado" ${moodToEdit.mood === 'Frustrado' ? 'selected' : ''}>😖 Frustrado</option>
+        <option value="Preocupado" ${moodToEdit.mood === 'Preocupado' ? 'selected' : ''}>😟 Preocupado</option>
+        <option value="Confundido" ${moodToEdit.mood === 'Confundido' ? 'selected' : ''}>😕 Confundido</option>
+        <option value="Esperanzado" ${moodToEdit.mood === 'Esperanzado' ? 'selected' : ''}>🤞 Esperanzado</option>
+        <option value="Aburrido" ${moodToEdit.mood === 'Aburrido' ? 'selected' : ''}>😐 Aburrido</option>
+        <option value="Cansado" ${moodToEdit.mood === 'Cansado' ? 'selected' : ''}>😴 Cansado</option>
+        <option value="Sorprendido" ${moodToEdit.mood === 'Sorprendido' ? 'selected' : ''}>😲 Sorprendido</option>
+        <option value="Deprimido" ${moodToEdit.mood === 'Deprimido' ? 'selected' : ''}>😞 Deprimido</option>
+        <option value="Agradecido" ${moodToEdit.mood === 'Agradecido' ? 'selected' : ''}>🙏 Agradecido</option>
+        <option value="Avergonzado" ${moodToEdit.mood === 'Avergonzado' ? 'selected' : ''}>😳 Avergonzado</option>
+        <option value="Motivado" ${moodToEdit.mood === 'Motivado' ? 'selected' : ''}>💪 Motivado</option>
+        <option value="Estresado" ${moodToEdit.mood === 'Estresado' ? 'selected' : ''}>😣 Estresado</option>
+        <option value="Satisfecho" ${moodToEdit.mood === 'Satisfecho' ? 'selected' : ''}>😊 Satisfecho</option>
+        <option value="Nervioso" ${moodToEdit.mood === 'Nervioso' ? 'selected' : ''}>😬 Nervioso</option>
+    </select>
 
-                <label for="edit-notes">Notas:</label>
-                <textarea id="edit-notes" rows="3">${moodToEdit.notes}</textarea>
+    <label for="edit-notes">Notas:</label>
+    <textarea id="edit-notes" rows="3">${moodToEdit.notes}</textarea>
 
-                <button type="button" class="save-edit">Guardar Cambios</button>
-            `;
+    <button type="button" class="save-edit">Guardar Cambios</button>
+`;
 
             // Remplazamos el contenido del li con el formulario de edición
             li.innerHTML = '';
@@ -163,4 +179,3 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
-
