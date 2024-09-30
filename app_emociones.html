@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Historial de Estado de Ánimo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Enlace al archivo CSS -->
+    <link rel="stylesheet" href="styles_emociones.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Historial de Estado de Ánimo</h1>
+
+    <!-- Formulario de entrada -->
+    <form id="mood-form">
+        <label for="mood">Selecciona tu estado de ánimo:</label>
+        <select id="mood" required>
+            <option value="">--Seleccionar--</option>
+            <option value="Feliz">😊 Feliz</option>
+            <option value="Triste">😢 Triste</option>
+            <option value="Ansioso">😰 Ansioso</option>
+            <option value="Enojado">😠 Enojado</option>
+            <option value="Emocionado">😃 Emocionado</option>
+            <!-- Puedes agregar más opciones según sea necesario -->
+        </select>
+
+        <label for="notes">Notas (opcional):</label>
+        <textarea id="notes" rows="4" placeholder="Escribe aquí tus notas..."></textarea>
+
+        <button type="submit">Guardar Estado de Ánimo</button>
+    </form>
+
+    <!-- Sección de historial -->
+    <h2>Tu Historial</h2>
+    <ul id="mood-history"></ul>
+</div>
+
+<!-- Enlace al archivo JavaScript -->
+<script src="script_emociones.js"></script>
+</body>
+</html>
+
