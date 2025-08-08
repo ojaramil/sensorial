@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Semáforo de Emociones</title>
+<style>
+  :root{
+    --bg:#0f172a;/* slate-900 */
+    --panel:#111827;/* gray-900 */
+    --muted:#94a3b8;/* slate-400 */
+    --text:#e5e7eb;/* gray-200 */
+    --primary:#38bdf8;/* sky-400 */
+    --focus:#22d3ee;/* cyan-400 */
+    --green:#10b981;/* emerald */
+    --yellow:#f59e0b;/* amber */
+    --red:#ef4444;/* red */
+    --ring: 0 0 0 3px rgba(34,211,238,.35);
+  }
+  [data-contrast="high"]{
+    --bg:#000;
+    --panel:#111;
+    --muted:#ccc;
+    --text:#fff;
+    --primary:#0ff;
+    --focus:#0ff;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, Noto Sans, "Apple Color Emoji","Segoe UI Emoji";
+    background: radial-gradient(1200px 800px at 20% 0%, #0b1024, var(--bg));
+    color:var(--text);
+  }
+  .wrap{max-width:1100px;margin:0 auto;padding:24px;}
+  header{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+  header h1{margin:0;font-size:clamp(20px,2.6vw,30px);letter-spacing:.3px}
+  .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid #243044;color:var(--muted);padding:8px 12px;border-radius:999px;background:rgba(255,255,255,0.03)}
+  .grid{display:grid;gap:18px;grid-template-columns: 1.2fr 1fr}
+  @media (max-width: 980px){.grid{grid-template-columns:1fr}}
+  .card{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));border:1px solid rgba(148,163,184,.15);border-radius:16px;padding:16px}
+  .card h2{margin:.2rem 0 1rem;font-size:1.1rem;color:#fff}
+  .traffic{display:flex;gap:18px;align-items:center}
+  .lights{display:flex;gap:14px}
+  .light{width:80px;height:80px;border-radius:50%;filter:saturate(1.1);opacity:.35;transition:transform .15s ease, opacity .2s ease, box-shadow .2s ease}
+  .light[aria-pressed="true"], .light:focus{opacity:1;box-shadow:0 10px 30px rgba(0,0,0,.35), var(--ring)}
+  .light:active{transform:scale(.98)}
+  .light.green{background:radial-gradient(circle at 30% 30%, #baf, var(--green));}
+  .light.yellow{background:radial-gradient(circle at 30% 30%, #ffd, var(--yellow));}
+  .light.red{background:radial-gradient(circle at 30% 30%, #fcc, var(--red));}
+  .legend{display:flex;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:.95rem}
+  .kbd{border:1px solid rgba(148,163,184,.35);padding:2px 6px;border-radius:6px;background:rgba(255,255,255,.05);font-size:.9rem}
+  .strategies{display:grid;gap:10px}
+  .strategy{display:flex;gap:10px;align-items:center; padding:10px;border:1px solid rgba(148,163,184,.15);border-radius:12px;background:rgba(255,255,255,.03)}
+  .strategy input{transform:scale(1.2)}
+  textarea, input, select, button{font:inherit;color:inherit}
+  textarea, input[type="text"]{width:100%; background:#0b1227;border:1px solid rgba(148,163,184,.2);color:var(--text);padding:10px;border-radius:10px}
+  textarea:focus, input:focus, button:focus{outline:none;box-shadow:var(--ring)}
+  .btn{background:linear-gradient(180deg,#0ea5e9,#0284c7);border:1px solid #0ea5e9;padding:10px 14px;border-radius:12px;color:#00111a;font-weight:700;cursor:pointer}
+  .btn.secondary{background:linear-gradient(180deg, #1f2937, #0f172a); color:#e2e8f0;border-color:#334155}
+  .btn.ghost{background:transparent;border:1px dashed #334155;color:var(--muted)}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media (max-width: 700px){.row{grid-template-columns:1fr}}
+  .breath{
+    display:grid;place-items:center;min-height:220px;border:1px solid rgba(148,163,184,.15);border-radius:14px;background:radial-gradient(600px 300px at 50% -20%, rgba(56,189,248,.18), transparent);
+  }
+  .bubble{width:90px;height:90px;border-radius:999px;border:2px solid var(--primary);display:grid;place-items:center}
+  .bubble.animate{animation: breath 4s ease-in-out infinite}
+  @keyframes breath{0%{transform:scale(1)}25%{transform:scale(1.25)}50%{transform:scale(1.5)}75%{transform:scale(1.25)}100%{transform:scale(1)}}
+  .table{border-collapse:collapse;width:100%}
+  .table th,.table td{border-bottom:1px solid rgba(148,163,184,.15);padding:10px 6px;text-align:left;font-size:.95rem}
+  .table th{color:#cbd5e1}
+  .filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .note{color:var(--muted);font-size:.9rem}
+  .switch{display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+  .switch input{appearance:none;width:42px;height:22px;background:#334155;border-radius:999px;position:relative;outline:none;border:1px solid #46556b}
+  .switch input:checked{background:#0ea5e9}
+  .switch input::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left .2s}
+  .switch input:checked::after{left:22px}
+  .small{font-size:.92rem}
+</style>
+</head>
+<body>
+  <div class="wrap" id="app" data-reduced-motion="false" data-contrast="normal">
+    <header>
+      <h1>Semáforo de Emociones</h1>
+      <div class="pill" role="status" aria-live="polite">
+        <span id="statusText">Selecciona tu estado (1/2/3 o V/A/R)</span>
+      </div>
+    </header>
+
+    <div class="grid" aria-label="Panel principal">
+      <section class="card" aria-labelledby="sem-title">
+        <h2 id="sem-title">1) Elige tu color actual</h2>
+        <div class="traffic">
+          <div class="lights" role="group" aria-label="Semáforo">
+            <button class="light green" id="btn-green" aria-label="Estoy en verde (calma)" aria-pressed="false"></button>
+            <button class="light yellow" id="btn-yellow" aria-label="Estoy en amarillo (tensión)" aria-pressed="false"></button>
+            <button class="light red" id="btn-red" aria-label="Estoy en rojo (ira alta)" aria-pressed="false"></button>
+          </div>
+          <div class="legend">
+            <span class="kbd">1 / V</span> Verde
+            <span class="kbd">2 / A</span> Amarillo
+            <span class="kbd">3 / R</span> Rojo
+          </div>
+        </div>
+
+        <div id="desc" class="note" style="margin-top:12px">Consejo: identifica señales físicas (ritmo cardíaco, tensión, calor) y pensamientos que aparecen en cada color.</div>
+
+        <h2 style="margin-top:18px">2) Estrategias sugeridas</h2>
+        <div id="strategies" class="strategies" aria-live="polite"></div>
+
+        <div class="row" style="margin-top:10px">
+          <div>
+            <label for="newStrat" class="small">Agregar estrategia propia</label>
+            <div style="display:flex;gap:8px;margin-top:6px">
+              <input type="text" id="newStrat" placeholder="Ej.: escuchar música 2 minutos"/>
+              <button class="btn secondary" id="addStrat">Añadir</button>
+            </div>
+          </div>
+          <div>
+            <label class="small">Acciones rápidas</label>
+            <div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap">
+              <button class="btn" id="startBreath">Respiración 4-4-4-4</button>
+              <button class="btn ghost" id="clearChecks">Desmarcar todo</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="breath" style="margin-top:14px" aria-live="polite">
+          <div class="bubble" id="bubble"><span id="breathText">Listo para respirar</span></div>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="reg-title">
+        <h2 id="reg-title">3) Registro rápido</h2>
+        <div class="row">
+          <div>
+            <label class="small" for="situacion">Situación</label>
+            <textarea id="situacion" rows="3" placeholder="¿Qué ocurrió? (breve)"></textarea>
+          </div>
+          <div>
+            <label class="small" for="seniales">Señales físicas</label>
+            <textarea id="seniales" rows="3" placeholder="Ej.: tensión en hombros, calor en el rostro"></textarea>
+          </div>
+        </div>
+        <div class="row" style="margin-top:10px">
+          <div>
+            <label class="small" for="pensamientos">Pensamientos</label>
+            <textarea id="pensamientos" rows="3" placeholder="¿Qué te decías a ti mismo?"></textarea>
+          </div>
+          <div>
+            <label class="small" for="notas">Notas</label>
+            <textarea id="notas" rows="3" placeholder="Estrategias que ayudaron / próximos pasos"></textarea>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
+          <button class="btn" id="save">Guardar registro</button>
+          <button class="btn secondary" id="download">Descargar registro (.json)</button>
+          <span class="note" id="saveStatus" aria-live="polite"></span>
+        </div>
+
+        <hr style="margin:16px 0;border-color:rgba(148,163,184,.15)"/>
+        <div class="filters">
+          <strong>Historial</strong>
+          <select id="filterLevel" aria-label="Filtrar por color">
+            <option value="">Todos</option>
+            <option value="verde">Verde</option>
+            <option value="amarillo">Amarillo</option>
+            <option value="rojo">Rojo</option>
+          </select>
+          <button class="btn ghost" id="clearHistory">Borrar historial</button>
+        </div>
+        <div style="max-height:260px;overflow:auto;margin-top:8px">
+          <table class="table" id="history">
+            <thead><tr><th>Fecha</th><th>Color</th><th>Estrategias</th><th>Situación</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <hr style="margin:16px 0;border-color:rgba(148,163,184,.15)"/>
+        <div class="filters">
+          <strong>Accesibilidad</strong>
+          <label class="switch small">Alto contraste <input type="checkbox" id="toggleContrast"/></label>
+          <label class="switch small">Reducir animaciones <input type="checkbox" id="toggleMotion"/></label>
+        </div>
+      </section>
+    </div>
+
+    <p class="note" style="margin-top:14px">Consejo: usa el teclado <span class="kbd">1/2/3</span> o <span class="kbd">V/A/R</span> para seleccionar el color. Todos los datos se guardan <strong>solo en tu navegador</strong> (LocalStorage).</p>
+  </div>
+
+<script>
+(function(){
+  const statusText = document.getElementById('statusText');
+  const desc = document.getElementById('desc');
+  const strategiesEl = document.getElementById('strategies');
+  const addStrat = document.getElementById('addStrat');
+  const newStrat = document.getElementById('newStrat');
+  const clearChecks = document.getElementById('clearChecks');
+  const startBreath = document.getElementById('startBreath');
+  const bubble = document.getElementById('bubble');
+  const breathText = document.getElementById('breathText');
+  const situacion = document.getElementById('situacion');
+  const seniales = document.getElementById('seniales');
+  const pensamientos = document.getElementById('pensamientos');
+  const notas = document.getElementById('notas');
+  const saveBtn = document.getElementById('save');
+  const saveStatus = document.getElementById('saveStatus');
+  const downloadBtn = document.getElementById('download');
+  const historyTable = document.getElementById('history').querySelector('tbody');
+  const filterLevel = document.getElementById('filterLevel');
+  const clearHistory = document.getElementById('clearHistory');
+  const toggleContrast = document.getElementById('toggleContrast');
+  const toggleMotion = document.getElementById('toggleMotion');
+  const app = document.getElementById('app');
+
+  const defaultStrategies = {
+    verde:[
+      'Mantener respiración calmada (3 ciclos lentos)',
+      'Agradecer algo de este momento',
+      'Micro-pausa de estiramiento (30 s)'
+    ],
+    amarillo:[
+      'Respirar 4-4-4-4 (inspirar-sostener-exhalar-sostener)',
+      'Pedir 2 minutos de pausa antes de responder',
+      'Nombrar la emoción en voz baja o por escrito'
+    ],
+    rojo:[
+      'Tomar distancia física/visual 2 minutos',
+      'Respirar 5 veces y beber agua',
+      'Usar frase segura: "Ahora no respondo, vuelvo en 5 min"'
+    ]
+  };
+
+  let currentLevel = null; // 'verde' | 'amarillo' | 'rojo'
+
+  // Load config
+  const config = JSON.parse(localStorage.getItem('semaforo_config')||'{}');
+  if(config.contrast==='high'){document.body.setAttribute('data-contrast','high'); toggleContrast.checked = true;}
+  if(config.reducedMotion){app.dataset.reducedMotion = 'true'; toggleMotion.checked = true;}
+
+  function setLevel(level){
+    currentLevel = level;
+    updatePressed(level);
+    const map = {verde:'Calma / Regulación', amarillo:'Tensión / Alerta', rojo:'Ira alta / Desborde'};
+    statusText.textContent = 'Estado: ' + level.toUpperCase() + ' — ' + map[level];
+    desc.textContent = (
+      level==='verde' ? 'Verde: estás regulado. Mantén hábitos que te cuidan.' :
+      level==='amarillo' ? 'Amarillo: detectas tensión. Aplica estrategias antes de escalar.' :
+      'Rojo: alto nivel de ira. Enfócate en bajar intensidad con acciones simples y seguras.'
+    );
+    renderStrategies(level);
+  }
+
+  function updatePressed(level){
+    document.getElementById('btn-green').setAttribute('aria-pressed', level==='verde');
+    document.getElementById('btn-yellow').setAttribute('aria-pressed', level==='amarillo');
+    document.getElementById('btn-red').setAttribute('aria-pressed', level==='rojo');
+  }
+
+  function renderStrategies(level){
+    strategiesEl.innerHTML = '';
+    const list = (JSON.parse(localStorage.getItem('semaforo_strategies')||'{}')[level]) || defaultStrategies[level];
+    list.forEach((text, idx)=>{
+      const id = `strat-${level}-${idx}`;
+      const div = document.createElement('label');
+      div.className = 'strategy';
+      div.innerHTML = `<input type="checkbox" aria-label="${text}"/> <span>${text}</span>`;
+      strategiesEl.appendChild(div);
+    });
+  }
+
+  function addStrategy(){
+    const txt = newStrat.value.trim();
+    if(!currentLevel){alert('Primero elige un color.'); return;}
+    if(!txt) return;
+    const store = JSON.parse(localStorage.getItem('semaforo_strategies')||'{}');
+    if(!store[currentLevel]) store[currentLevel] = [...defaultStrategies[currentLevel]];
+    store[currentLevel].push(txt);
+    localStorage.setItem('semaforo_strategies', JSON.stringify(store));
+    newStrat.value='';
+    renderStrategies(currentLevel);
+  }
+
+  function getCheckedStrategies(){
+    return Array.from(strategiesEl.querySelectorAll('input:checked')).map(el=>el.nextElementSibling.textContent);
+  }
+
+  function clearChecked(){
+    strategiesEl.querySelectorAll('input:checked').forEach(el=>el.checked=false);
+  }
+
+  function startBreathing(){
+    let step = 0; // 0 insp,1 hold,2 exp,3 hold
+    const labels = ['Inhala (4)','Sostén (4)','Exhala (4)','Sostén (4)'];
+    const endAt = Date.now()+4*4*1000; // ~16s cycle
+    const reduced = app.dataset.reducedMotion==='true';
+
+    const doStep = ()=>{
+      breathText.textContent = labels[step];
+      bubble.classList.toggle('animate', !reduced);
+      let count = 4;
+      const tick = ()=>{
+        breathText.textContent = labels[step].replace('(4)',`(${count})`);
+        if(--count>=0){timer = setTimeout(tick,1000);} else {next();}
+      }
+      tick();
+    }
+    const next = ()=>{ step = (step+1)%4; if(Date.now()<endAt){ doStep(); } else { bubble.classList.remove('animate'); breathText.textContent='Listo para respirar'; } }
+    let timer; doStep();
+  }
+
+  function saveEntry(){
+    if(!currentLevel){alert('Elige un color antes de guardar.'); return;}
+    const record = {
+      ts: new Date().toISOString(),
+      nivel: currentLevel,
+      estrategias: getCheckedStrategies(),
+      situacion: situacion.value.trim(),
+      seniales: seniales.value.trim(),
+      pensamientos: pensamientos.value.trim(),
+      notas: notas.value.trim()
+    };
+    const arr = JSON.parse(localStorage.getItem('semaforo_registros')||'[]');
+    arr.unshift(record);
+    localStorage.setItem('semaforo_registros', JSON.stringify(arr));
+    saveStatus.textContent = 'Guardado';
+    setTimeout(()=> saveStatus.textContent='', 1500);
+    renderHistory();
+  }
+
+  function renderHistory(){
+    const arr = JSON.parse(localStorage.getItem('semaforo_registros')||'[]');
+    const level = filterLevel.value;
+    historyTable.innerHTML = '';
+    arr.filter(r=>!level || r.nivel===level).forEach(r=>{
+      const tr = document.createElement('tr');
+      const d = new Date(r.ts);
+      const fecha = d.toLocaleString();
+      tr.innerHTML = `<td>${fecha}</td><td style="text-transform:capitalize">${r.nivel}</td><td>${(r.estrategias||[]).join(', ')}</td><td>${r.situacion||''}</td>`;
+      historyTable.appendChild(tr);
+    });
+  }
+
+  function download(){
+    const data = localStorage.getItem('semaforo_registros')||'[]';
+    const blob = new Blob([data],{type:'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'semaforo_registros.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+
+  function wipeHistory(){
+    if(confirm('¿Borrar todo el historial? Esta acción no se puede deshacer.')){
+      localStorage.removeItem('semaforo_registros');
+      renderHistory();
+    }
+  }
+
+  function setContrast(on){
+    document.body.setAttribute('data-contrast', on? 'high':'normal');
+    const conf = JSON.parse(localStorage.getItem('semaforo_config')||'{}');
+    conf.contrast = on? 'high': 'normal';
+    localStorage.setItem('semaforo_config', JSON.stringify(conf));
+  }
+  function setMotion(red){
+    app.dataset.reducedMotion = red? 'true':'false';
+    const conf = JSON.parse(localStorage.getItem('semaforo_config')||'{}');
+    conf.reducedMotion = !!red;
+    localStorage.setItem('semaforo_config', JSON.stringify(conf));
+  }
+
+  // Bindings
+  document.getElementById('btn-green').addEventListener('click',()=>setLevel('verde'));
+  document.getElementById('btn-yellow').addEventListener('click',()=>setLevel('amarillo'));
+  document.getElementById('btn-red').addEventListener('click',()=>setLevel('rojo'));
+  addStrat.addEventListener('click', addStrategy);
+  clearChecks.addEventListener('click', clearChecked);
+  startBreath.addEventListener('click', startBreathing);
+  saveBtn.addEventListener('click', saveEntry);
+  downloadBtn.addEventListener('click', download);
+  filterLevel.addEventListener('change', renderHistory);
+  clearHistory.addEventListener('click', wipeHistory);
+  toggleContrast.addEventListener('change', (e)=> setContrast(e.target.checked));
+  toggleMotion.addEventListener('change', (e)=> setMotion(e.target.checked));
+
+  // Keyboard shortcuts
+  window.addEventListener('keydown', (e)=>{
+    const k = e.key.toLowerCase();
+    if(k==='1' || k==='v'){ setLevel('verde'); }
+    if(k==='2' || k==='a'){ setLevel('amarillo'); }
+    if(k==='3' || k==='r'){ setLevel('rojo'); }
+  });
+
+  // Init
+  renderHistory();
+})();
+</script>
+</body>
+</html>
